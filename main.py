@@ -13,6 +13,7 @@ from concurrent.futures import ProcessPoolExecutor
 import asyncio
 import aiohttp
 from fastapi import FastAPI, Request, Response
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from pydantic import BaseModel, HttpUrl
 from app01 import url as url01
@@ -41,6 +42,15 @@ app.include_router(url02.app02, prefix="/app02", tags=["app02 form表单数据�
 app.include_router(url03.app03, prefix="/app03", tags=["app03 request response"])
 app.include_router(url04.app04, prefix="/app04", tags=["app04 中间件"])
 
+#跨域处理
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins="*",
+    allow_credentials=True,
+    allow_methods=["GET","POST","PUT","DELETE"],
+    allow_headers=["*"],
+
+)
 
 # m1 中间件先执行 然后m2 ，response 先return给m2 m2再return m1
 @app.middleware("http")
